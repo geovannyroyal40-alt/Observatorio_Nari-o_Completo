@@ -1,52 +1,21 @@
 # Observatorio Regional de Nariño
 
-Análisis Económico, Territorial y Competitividad Municipal
+Plataforma de análisis económico, territorial y competitividad municipal.
 
-Plataforma web estática lista para desplegar en **Netlify** o cualquier hosting estático.
+**Autores:** Camila Guerrero & Geovanny Betancourt
 
-## Autores
-- **Camila Guerrero** – Desarrolladora • Análisis de Datos
-- **Geovanny Betancourt** – Desarrollador • Econometría Espacial
+## Despliegue en Netlify
+
+1. Sube el **contenido** de esta carpeta (index.html, assets/, etc.) a la raíz de un repositorio GitHub.
+2. En Netlify: Import project → selecciona el repo.
+3. Publish directory: `.` (raíz)
+4. Deploy.
 
 ## Características
-- Indicadores oficiales (DANE + CPC)
-- Mapas interactivos de municipios de Nariño (Leaflet)
-- Econometría espacial explicada (Moran + LISA)
-- Simulador de escenarios con Machine Learning
-- Chatbot temático inteligente
-- Diseño profesional, responsivo e intuitivo
-
-## Cómo desplegar en Netlify
-
-1. Sube esta carpeta completa a un repositorio de GitHub
-2. Entra a [https://app.netlify.com](https://app.netlify.com)
-3. "Add new site" → "Import an existing project"
-4. Conecta el repositorio
-5. Configuración de build:
-   - **Build command**: (dejar vacío)
-   - **Publish directory**: `.` (o la raíz)
-6. Deploy
-
-La página quedará publicada automáticamente.
-
-## Estructura
-```
-├── index.html
-├── README.md
-├── assets/
-│   ├── css/styles.css
-│   ├── js/
-│   │   ├── data.js
-│   │   ├── maps.js
-│   │   ├── charts.js
-│   │   ├── ml.js
-│   │   ├── chatbot.js
-│   │   └── main.js
-│   ├── data/
-│   └── img/
-└── forms/
-```
-
-## Fuentes de datos
-- DANE: Pobreza Monetaria y Multidimensional 2024-2025, Valor Agregado Municipal, GEIH
-- Consejo Privado de Competitividad – Universidad del Rosario (IDC)
+- Tema oscuro elegante
+- Mapa coroplético de Colombia (variable seleccionable)
+- Mapa de municipios de Nariño
+- Econometría espacial (Moran + LISA explicado de forma intuitiva)
+- Simulador Machine Learning 2025-2030
+- Chatbot temático
+- Autores al inicio
