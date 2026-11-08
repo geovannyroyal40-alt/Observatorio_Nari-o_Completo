@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Observatorio Regional de Nariño | Análisis Económico y Competitividad</title>
+  <meta name="description" content="Observatorio Regional de Nariño - Econometría Espacial, Pobreza, PIB Municipal, Competitividad y Modelos de Machine Learning. Desarrollado por Camila Guerrero y Geovanny Betancourt." />
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0f4c81',
+            secondary: '#1a6bab',
+            accent: '#e8b86d',
+            dark: '#0b1c2c',
+            light: '#f8fafc'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="bg-primary text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-chart-line text-2xl text-accent"></i>
+          <div>
+            <span class="font-bold text-lg">Observatorio Regional de Nariño</span>
+            <p class="text-xs text-blue-200 hidden sm:block">Econometría Espacial • Competitividad • Desarrollo Territorial</p>
+          </div>
+        </div>
+        <div class="hidden md:flex space-x-6 text-sm font-medium">
+          <a href="#inicio" class="hover:text-accent transition">Inicio</a>
+          <a href="#indicadores" class="hover:text-accent transition">Indicadores</a>
+          <a href="#mapas" class="hover:text-accent transition">Mapas</a>
+          <a href="#econometria" class="hover:text-accent transition">Econometría Espacial</a>
+          <a href="#ml" class="hover:text-accent transition">Machine Learning</a>
+          <a href="#autores" class="hover:text-accent transition">Autores</a>
+          <a href="#chatbot" class="hover:text-accent transition">Asistente IA</a>
+        </div>
+        <button id="menuBtn" class="md:hidden text-white text-xl">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-primary border-t border-blue-800">
+      <div class="px-4 py-3 space-y-2 text-sm">
+        <a href="#inicio" class="block py-2">Inicio</a>
+        <a href="#indicadores" class="block py-2">Indicadores</a>
+        <a href="#mapas" class="block py-2">Mapas</a>
+        <a href="#econometria" class="block py-2">Econometría Espacial</a>
+        <a href="#ml" class="block py-2">Machine Learning</a>
+        <a href="#autores" class="block py-2">Autores</a>
+        <a href="#chatbot" class="block py-2">Asistente IA</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section id="inicio" class="bg-gradient-to-br from-primary via-secondary to-dark text-white py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+        Observatorio Regional de Nariño
+      </h1>
+      <p class="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+        Análisis económico, territorial y de competitividad municipal con econometría espacial, 
+        indicadores oficiales del DANE y modelos de Machine Learning para simulaciones de largo plazo.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="#indicadores" class="bg-accent text-dark font-semibold px-6 py-3 rounded-lg hover:bg-yellow-400 transition shadow-lg">
+          <i class="fas fa-chart-bar mr-2"></i> Ver Indicadores
+        </a>
+        <a href="#mapas" class="bg-white/10 backdrop-blur border border-white/30 px-6 py-3 rounded-lg hover:bg-white/20 transition">
+          <i class="fas fa-map-marked-alt mr-2"></i> Explorar Mapas
+        </a>
+        <a href="#chatbot" class="bg-white/10 backdrop-blur border border-white/30 px-6 py-3 rounded-lg hover:bg-white/20 transition">
+          <i class="fas fa-robot mr-2"></i> Preguntar al Asistente
+        </a>
+      </div>
+      <p class="mt-8 text-sm text-blue-200">
+        Fuentes: DANE (Pobreza 2024-2025, Valor Agregado Municipal) • Consejo Privado de Competitividad – Universidad del Rosario (IDC)
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== KPIs ========== -->
+  <section id="indicadores" class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-primary mb-2 text-center">Indicadores Clave – Nariño vs Colombia</h2>
+      <p class="text-center text-slate-500 mb-8">Comparación con valores nacionales oficiales (DANE 2024-2025)</p>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div class="bg-slate-50 rounded-xl p-4 shadow-sm border border-slate-100 text-center hover:shadow-md transition">
+          <p class="text-xs text-slate-500 uppercase tracking-wide">Pobreza Multidimensional</p>
+          <p class="text-2xl font-bold text-red-600 mt-1">19.7%</p>
+          <p class="text-xs text-red-500 mt-1">+8.2 pp vs Nacional (11.5%)</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 shadow-sm border border-slate-100 text-center hover:shadow-md transition">
+          <p class="text-xs text-slate-500 uppercase tracking-wide">Pobreza Monetaria</p>
+          <p class="text-2xl font-bold text-red-600 mt-1">38.7%</p>
+          <p class="text-xs text-red-500 mt-1">+6.9 pp vs Nacional (31.8%)</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 shadow-sm border border-slate-100 text-center hover:shadow-md transition">
+          <p class="text-xs text-slate-500 uppercase tracking-wide">Tasa Desempleo</p>
+          <p class="text-2xl font-bold text-emerald-600 mt-1">7.6%</p>
+          <p class="text-xs text-emerald-600 mt-1">-1.3 pp vs Nacional (8.9%)</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 shadow-sm border border-slate-100 text-center hover:shadow-md transition">
+          <p class="text-xs text-slate-500 uppercase tracking-wide">Índice Competitividad</p>
+          <p class="text-2xl font-bold text-primary mt-1">4.47</p>
+          <p class="text-xs text-slate-500 mt-1">Puesto ~21 IDC Nacional</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 shadow-sm border border-slate-100 text-center hover:shadow-md transition">
+          <p class="text-xs text-slate-500 uppercase tracking-wide">Proxy Educación</p>
+          <p class="text-2xl font-bold text-primary mt-1">5.83</p>
+          <p class="text-xs text-slate-500 mt-1">Fortaleza relativa del departamento</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 shadow-sm border border-slate-100 text-center hover:shadow-md transition">
+          <p class="text-xs text-slate-500 uppercase tracking-wide">Valor Agregado (prom)</p>
+          <p class="text-2xl font-bold text-primary mt-1">1.155</p>
+          <p class="text-xs text-slate-500 mt-1">Miles de millones COP</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MAPAS ========== -->
+  <section id="mapas" class="py-12 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-primary mb-2 text-center">Cartografía y Análisis Territorial</h2>
+      <p class="text-center text-slate-500 mb-8">Distribución espacial de indicadores municipales y contexto nacional</p>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <!-- Mapa de municipios de Nariño -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+          <div class="bg-primary text-white px-4 py-3 font-semibold">
+            <i class="fas fa-map mr-2"></i> Municipios de Nariño – Variable seleccionada
+          </div>
+          <div class="p-4">
+            <div class="mb-3">
+              <label class="text-sm font-medium text-slate-600">Seleccionar variable:</label>
+              <select id="mapVariable" class="ml-2 border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-primary">
+                <option value="Pobreza_Multidimensional">Pobreza Multidimensional (%)</option>
+                <option value="Pobreza_Monetaria">Pobreza Monetaria (%)</option>
+                <option value="Tasa_Desempleo">Tasa de Desempleo (%)</option>
+                <option value="Indice_Competitividad">Índice de Competitividad</option>
+                <option value="Valor_Agregado">Valor Agregado Municipal</option>
+                <option value="Proxy_Educacion">Proxy Educación</option>
+              </select>
+            </div>
+            <div id="mapNarino" class="h-96 rounded-lg border border-slate-200"></div>
+            <p class="text-xs text-slate-500 mt-2">Mapa interactivo de municipios clave. El color representa la magnitud de la variable.</p>
+          </div>
+        </div>
+
+        <!-- Contexto Colombia -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+          <div class="bg-primary text-white px-4 py-3 font-semibold">
+            <i class="fas fa-globe-americas mr-2"></i> Contexto Nacional – Pobreza Multidimensional por Departamento
+          </div>
+          <div class="p-4">
+            <div id="mapColombia" class="h-96 rounded-lg border border-slate-200 bg-slate-100 flex items-center justify-center">
+              <div class="text-center text-slate-500">
+                <i class="fas fa-map-marked-alt text-4xl mb-3 text-primary"></i>
+                <p class="font-medium">Mapa coroplético de Colombia</p>
+                <p class="text-sm mt-1">Nariño se ubica en la región Pacífica con niveles de pobreza multidimensional superiores al promedio nacional (18.1% vs 11.5% en 2024).</p>
+                <p class="text-xs mt-3 text-slate-400">Fuente: DANE – Pobreza Multidimensional Departamental 2024</p>
+              </div>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div class="bg-red-50 border border-red-100 rounded-lg p-3">
+                <p class="font-semibold text-red-700">Nariño</p>
+                <p class="text-red-600">18.1% (2024)</p>
+              </div>
+              <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-3">
+                <p class="font-semibold text-emerald-700">Nacional</p>
+                <p class="text-emerald-600">11.5% (2024)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ranking de municipios -->
+      <div class="mt-8 bg-white rounded-xl shadow-md p-6">
+        <h3 class="font-bold text-lg text-primary mb-4">Ranking Municipal – Variable seleccionada</h3>
+        <canvas id="rankingChart" height="120"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ECONOMETRÍA ESPACIAL ========== -->
+  <section id="econometria" class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-primary mb-2 text-center">Econometría Espacial</h2>
+      <p class="text-center text-slate-500 mb-8">Autocorrelación espacial, Índice de Moran y clústeres LISA</p>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+          <h3 class="font-bold text-primary mb-3"><i class="fas fa-project-diagram mr-2"></i>¿Qué es la Econometría Espacial?</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            La econometría espacial estudia la dependencia geográfica entre observaciones. 
+            En Nariño, los municipios no son independientes: la pobreza, el desempleo o la competitividad 
+            de un municipio tienden a correlacionarse con la de sus vecinos (efecto de desbordamiento o spillover).
+          </p>
+          <ul class="mt-4 space-y-2 text-sm text-slate-600">
+            <li><i class="fas fa-check text-emerald-500 mr-2"></i>Índice de Moran Global: mide la autocorrelación espacial general</li>
+            <li><i class="fas fa-check text-emerald-500 mr-2"></i>LISA (Local Indicators of Spatial Association): identifica clústeres locales</li>
+            <li><i class="fas fa-check text-emerald-500 mr-2"></i>Matriz de pesos espaciales: k-nearest neighbors sobre coordenadas reales</li>
+          </ul>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+          <h3 class="font-bold text-primary mb-3"><i class="fas fa-chart-area mr-2"></i>Resultados para Nariño</h3>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center bg-white rounded-lg p-3 shadow-sm">
+              <span class="text-sm font-medium">I de Moran (Pobreza Multidimensional)</span>
+              <span class="font-bold text-primary">0.312</span>
+            </div>
+            <div class="flex justify-between items-center bg-white rounded-lg p-3 shadow-sm">
+              <span class="text-sm font-medium">p-value (simulación)</span>
+              <span class="font-bold text-emerald-600">0.018</span>
+            </div>
+            <div class="flex justify-between items-center bg-white rounded-lg p-3 shadow-sm">
+              <span class="text-sm font-medium">Interpretación</span>
+              <span class="text-sm text-emerald-700 font-medium">Autocorrelación positiva significativa</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-4">
+            Existe evidencia de que los municipios con alta (o baja) pobreza multidimensional 
+            tienden a agruparse espacialmente. Esto justifica políticas territoriales focalizadas.
+          </p>
+        </div>
+      </div>
+
+      <!-- Clústeres -->
+      <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+        <h3 class="font-bold text-primary mb-4">Tipos de Clústeres LISA</h3>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+          <div class="bg-red-100 border border-red-200 rounded-lg p-4 text-center">
+            <div class="w-8 h-8 bg-red-500 rounded-full mx-auto mb-2"></div>
+            <p class="font-semibold text-red-800">Alto-Alto (HH)</p>
+            <p class="text-red-700 text-xs mt-1">Municipio alto rodeado de vecinos altos</p>
+          </div>
+          <div class="bg-blue-100 border border-blue-200 rounded-lg p-4 text-center">
+            <div class="w-8 h-8 bg-blue-600 rounded-full mx-auto mb-2"></div>
+            <p class="font-semibold text-blue-800">Bajo-Bajo (LL)</p>
+            <p class="text-blue-700 text-xs mt-1">Municipio bajo rodeado de vecinos bajos</p>
+          </div>
+          <div class="bg-orange-100 border border-orange-200 rounded-lg p-4 text-center">
+            <div class="w-8 h-8 bg-orange-400 rounded-full mx-auto mb-2"></div>
+            <p class="font-semibold text-orange-800">Alto-Bajo (HL)</p>
+            <p class="text-orange-700 text-xs mt-1">Municipio alto rodeado de vecinos bajos</p>
+          </div>
+          <div class="bg-sky-100 border border-sky-200 rounded-lg p-4 text-center">
+            <div class="w-8 h-8 bg-sky-300 rounded-full mx-auto mb-2"></div>
+            <p class="font-semibold text-sky-800">Bajo-Alto (LH)</p>
+            <p class="text-sky-700 text-xs mt-1">Municipio bajo rodeado de vecinos altos</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MACHINE LEARNING ========== -->
+  <section id="ml" class="py-12 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-primary mb-2 text-center">Modelos de Machine Learning – Simulaciones de Largo Plazo</h2>
+      <p class="text-center text-slate-500 mb-8">Proyecciones y escenarios para apoyar la toma de decisiones territoriales</p>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <h3 class="font-bold text-primary mb-4"><i class="fas fa-robot mr-2"></i>Simulador de Escenarios</h3>
+          <p class="text-sm text-slate-600 mb-4">
+            Ajusta los parámetros y observa el impacto proyectado sobre el Índice de Competitividad 
+            y la Pobreza Multidimensional a 5 y 10 años (modelo de regresión calibrado con datos municipales).
+          </p>
+          
+          <div class="space-y-4">
+            <div>
+              <label class="text-sm font-medium">Inversión en Educación (proxy 0-10)</label>
+              <input type="range" id="eduSlider" min="3" max="9" step="0.1" value="5.8" class="w-full accent-primary" />
+              <div class="flex justify-between text-xs text-slate-500"><span>3</span><span id="eduVal">5.8</span><span>9</span></div>
+            </div>
+            <div>
+              <label class="text-sm font-medium">Reducción de Pobreza Multidimensional (pp)</label>
+              <input type="range" id="povSlider" min="0" max="10" step="0.5" value="2" class="w-full accent-primary" />
+              <div class="flex justify-between text-xs text-slate-500"><span>0</span><span id="povVal">2.0</span><span>10</span></div>
+            </div>
+            <div>
+              <label class="text-sm font-medium">Crecimiento del Valor Agregado anual (%)</label>
+              <input type="range" id="vaSlider" min="0" max="8" step="0.2" value="3.5" class="w-full accent-primary" />
+              <div class="flex justify-between text-xs text-slate-500"><span>0%</span><span id="vaVal">3.5%</span><span>8%</span></div>
+            </div>
+            <button id="runSim" class="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-secondary transition">
+              <i class="fas fa-play mr-2"></i> Ejecutar Simulación
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <h3 class="font-bold text-primary mb-4"><i class="fas fa-chart-line mr-2"></i>Resultados de la Simulación</h3>
+          <canvas id="simChart" height="220"></canvas>
+          <div id="simResults" class="mt-4 grid grid-cols-2 gap-3 text-sm">
+            <div class="bg-blue-50 rounded-lg p-3 text-center">
+              <p class="text-xs text-slate-500">Competitividad 2030</p>
+              <p class="text-xl font-bold text-primary" id="comp2030">—</p>
+            </div>
+            <div class="bg-emerald-50 rounded-lg p-3 text-center">
+              <p class="text-xs text-slate-500">Pobreza Mult. 2030</p>
+              <p class="text-xl font-bold text-emerald-700" id="pov2030">—</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-3">
+            Modelo: regresión lineal multivariable calibrada con los 15 municipios de la muestra. 
+            Las proyecciones son ilustrativas y asumen ceteris paribus.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== AUTORES ========== -->
+  <section id="autores" class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-primary mb-2 text-center">Autores y Desarrolladores</h2>
+      <p class="text-center text-slate-500 mb-10">Equipo responsable del diseño, modelado y desarrollo de este Observatorio</p>
+
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="bg-slate-50 rounded-2xl p-6 text-center shadow-sm border border-slate-100 hover:shadow-md transition">
+          <div class="w-24 h-24 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl font-bold">
+            CG
+          </div>
+          <h3 class="text-xl font-bold text-primary">Camila Guerrero</h3>
+          <p class="text-sm text-slate-500 mt-1">Desarrolladora • Análisis de Datos</p>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+            Especialista en econometría aplicada y visualización de datos territoriales. 
+            Responsable del diseño de indicadores, modelado espacial y la interfaz de usuario.
+          </p>
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-6 text-center shadow-sm border border-slate-100 hover:shadow-md transition">
+          <div class="w-24 h-24 bg-secondary rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl font-bold">
+            GB
+          </div>
+          <h3 class="text-xl font-bold text-primary">Geovanny Betancourt</h3>
+          <p class="text-sm text-slate-500 mt-1">Desarrollador • Econometría Espacial</p>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+            Enfocado en la implementación de modelos de autocorrelación espacial (Moran, LISA), 
+            machine learning para proyecciones y la arquitectura técnica de la plataforma.
+          </p>
+        </div>
+      </div>
+
+      <p class="text-center text-sm text-slate-500 mt-8">
+        Observatorio Regional de Nariño • 2025-2026<br>
+        Herramienta de diagnóstico territorial para la toma de decisiones de política pública.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== CHATBOT ========== -->
+  <section id="chatbot" class="py-12 bg-slate-50">
+    <div class="max-w-3xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-primary mb-2 text-center">Asistente Inteligente del Observatorio</h2>
+      <p class="text-center text-slate-500 mb-6">Pregunta sobre pobreza, competitividad, econometría espacial o los resultados de Nariño</p>
+
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+        <div class="bg-primary text-white px-4 py-3 flex items-center gap-2">
+          <i class="fas fa-robot"></i>
+          <span class="font-semibold">Asistente Territorial de Nariño</span>
+        </div>
+        <div id="chatMessages" class="h-80 overflow-y-auto p-4 space-y-3 bg-slate-50">
+          <div class="flex gap-2">
+            <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm shrink-0">IA</div>
+            <div class="bg-white rounded-xl rounded-tl-none px-4 py-2 shadow-sm text-sm max-w-[85%]">
+              ¡Hola! Soy el asistente del Observatorio Regional de Nariño. Puedo responder preguntas sobre pobreza monetaria y multidimensional, competitividad, econometría espacial, mapas y los modelos de simulación. ¿En qué te ayudo?
+            </div>
+          </div>
+        </div>
+        <div class="p-3 border-t border-slate-200 flex gap-2">
+          <input id="chatInput" type="text" placeholder="Escribe tu pregunta..." 
+                 class="flex-1 border border-slate-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+          <button id="chatSend" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-dark text-slate-300 py-10">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <p class="font-semibold text-white mb-2">Observatorio Regional de Nariño</p>
+      <p class="text-sm">Análisis Económico, Territorial y Competitividad Municipal</p>
+      <p class="text-xs mt-4 text-slate-500">
+        Desarrollado por Camila Guerrero & Geovanny Betancourt • Datos: DANE & CPC-Universidad del Rosario<br>
+        Esta herramienta es de carácter académico y de diagnóstico. No sustituye las cifras oficiales desagregadas del DANE.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/maps.js"></script>
+  <script src="assets/js/charts.js"></script>
+  <script src="assets/js/ml.js"></script>
+  <script src="assets/js/chatbot.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
